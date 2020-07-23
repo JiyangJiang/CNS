@@ -85,8 +85,13 @@ function WMHextraction_preprocessing_Step2 (studyFolder, spm12path, coregExcldLi
 
             output = spm_jobman ('run',matlabbatch);
 
-            movefile (strcat (studyFolder, '/subjects/', ID, '/mri/orig/c*'), strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing'), 'f'); % move the segmented T1 to preprocessing folder
-            movefile (strcat (studyFolder, '/subjects/', ID, '/mri/orig/rc*'), strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing'), 'f'); % move the segmented T1 to preprocessing folder
+            movefile (strcat (studyFolder, '/subjects/', ID, '/mri/orig/c1*'), strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing'), 'f'); % move the segmented T1 to preprocessing folder
+            movefile (strcat (studyFolder, '/subjects/', ID, '/mri/orig/c2*'), strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing'), 'f'); % move the segmented T1 to preprocessing folder
+            movefile (strcat (studyFolder, '/subjects/', ID, '/mri/orig/c3*'), strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing'), 'f'); % move the segmented T1 to preprocessing folder
+            movefile (strcat (studyFolder, '/subjects/', ID, '/mri/orig/rc1*'), strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing'), 'f'); % move the segmented T1 to preprocessing folder
+            movefile (strcat (studyFolder, '/subjects/', ID, '/mri/orig/rc2*'), strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing'), 'f'); % move the segmented T1 to preprocessing folder
+            movefile (strcat (studyFolder, '/subjects/', ID, '/mri/orig/rc3*'), strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing'), 'f'); % move the segmented T1 to preprocessing folder
+            
             movefile (strcat (studyFolder, '/subjects/', ID, '/mri/orig/*.mat'), strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing'), 'f');
 
             
