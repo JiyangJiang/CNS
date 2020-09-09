@@ -80,11 +80,18 @@ function WMHextraction_woQC_cmd (studyFolder, ...
     % folder, using ID as folder name. Copy corresponding T1 and FLAIR to the
     % orig folder of each subject
     parfor i = 1:Nsubj
-        T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
-        ID = T1imgNames{1};   % first section is ID
-        mkdir (strcat(studyFolder,'/subjects/',ID,'/mri'),'orig');  % create orig folder under each subject folder
-        copyfile (strcat (studyFolder,'/originalImg/T1/', T1folder(i).name), strcat(studyFolder,'/subjects/',ID,'/mri/orig/'));        % copy T1 to each subject folder
-        copyfile (strcat (studyFolder,'/originalImg/FLAIR/', FLAIRfolder(i).name), strcat(studyFolder,'/subjects/',ID,'/mri/orig/'));  % copy FLAIR to each subject folder
+        try
+
+            T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
+            ID = T1imgNames{1};   % first section is ID
+            mkdir (strcat(studyFolder,'/subjects/',ID,'/mri'),'orig');  % create orig folder under each subject folder
+            copyfile (strcat (studyFolder,'/originalImg/T1/', T1folder(i).name), strcat(studyFolder,'/subjects/',ID,'/mri/orig/'));        % copy T1 to each subject folder
+            copyfile (strcat (studyFolder,'/originalImg/FLAIR/', FLAIRfolder(i).name), strcat(studyFolder,'/subjects/',ID,'/mri/orig/'));  % copy FLAIR to each subject folder
+        catch ME
+
+            WMHextraction_dealWithProcErr (ME, fullfile(studyFolder,'subjects'), ID, mfilename('fullpath'));
+
+        end
     end
 
     
@@ -145,20 +152,27 @@ function WMHextraction_woQC_cmd (studyFolder, ...
 %     system (cmd_skullStriping_FAST_1);
     
     parfor i = 1:Nsubj
-        T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
-        ID = T1imgNames{1};   % first section is ID
 
-        if ismember(ID, excldIDs) == 0
+        try
+            T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
+            ID = T1imgNames{1};   % first section is ID
 
-            cmd_skullStriping_FAST_2 = [CNSP_path '/WMH_extraction/WMHextraction/WMHextraction_SkullStriping_and_FAST.sh ' ...
-                                                                                                                            T1folder(i).name ' ' ...
-                                                                                                                            FLAIRfolder(i).name ' ' ...
-                                                                                                                            studyFolder '/subjects ' ...
-                                                                                                                            ID ' ' ...
-                                                                                                                            CNSP_path ' ' ...
-                                                                                                                            strrep(dartelTemplate, ' ', '_') ' ' ...
-                                                                                                                            ageRange];
-            system (cmd_skullStriping_FAST_2);
+            if ismember(ID, excldIDs) == 0
+
+                cmd_skullStriping_FAST_2 = [CNSP_path '/WMH_extraction/WMHextraction/WMHextraction_SkullStriping_and_FAST.sh ' ...
+                                                                                                                                T1folder(i).name ' ' ...
+                                                                                                                                FLAIRfolder(i).name ' ' ...
+                                                                                                                                studyFolder '/subjects ' ...
+                                                                                                                                ID ' ' ...
+                                                                                                                                CNSP_path ' ' ...
+                                                                                                                                strrep(dartelTemplate, ' ', '_') ' ' ...
+                                                                                                                                ageRange];
+                system (cmd_skullStriping_FAST_2);
+            end
+        catch ME
+
+            WMHextraction_dealWithProcErr (ME, fullfile(studyFolder,'subjects'), ID, mfilename('fullpath'));
+
         end
 
     end
@@ -173,17 +187,23 @@ function WMHextraction_woQC_cmd (studyFolder, ...
 
 
     parfor i = 1:Nsubj
-        T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
-        ID = T1imgNames{1};   % first section is ID
+        try
+            T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
+            ID = T1imgNames{1};   % first section is ID
 
-        if ismember(ID, excldIDs) == 0
-            cmd_kNN_step1_2 = [CNSP_path '/WMH_extraction/WMHextraction/WMHextraction_kNNdiscovery_Step1.sh ' ...
-                                                                                                            ID ' ' ...
-                                                                                                            studyFolder '/subjects ' ...
-                                                                                                            CNSP_path ' ' ...
-                                                                                                            strrep(dartelTemplate, ' ', '_') ' ' ...
-                                                                                                            ageRange];
-            system (cmd_kNN_step1_2);
+            if ismember(ID, excldIDs) == 0
+                cmd_kNN_step1_2 = [CNSP_path '/WMH_extraction/WMHextraction/WMHextraction_kNNdiscovery_Step1.sh ' ...
+                                                                                                                ID ' ' ...
+                                                                                                                studyFolder '/subjects ' ...
+                                                                                                                CNSP_path ' ' ...
+                                                                                                                strrep(dartelTemplate, ' ', '_') ' ' ...
+                                                                                                                ageRange];
+                system (cmd_kNN_step1_2);
+            end
+        catch ME
+
+            WMHextraction_dealWithProcErr (ME, fullfile(studyFolder,'subjects'), ID, mfilename('fullpath'));
+
         end
     end
 
@@ -194,21 +214,27 @@ function WMHextraction_woQC_cmd (studyFolder, ...
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
      
     parfor i = 1:Nsubj
-        T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
-        ID = T1imgNames{1};   % first section is ID
-        
-        if ismember(ID, excldIDs) == 0
-            WMHextraction_kNNdiscovery_Step2 (k, ...
-                                              ID, ...
-                                              CNSP_path, ...
-                                              studyFolder, ...
-                                              classifier, ...
-                                              dartelTemplate, ...
-                                              ageRange, ...
-                                              probThr, ...
-                                              trainingFeatures1, ...
-                                              trainingFeatures2 ...
-                                              );
+        try
+            T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
+            ID = T1imgNames{1};   % first section is ID
+            
+            if ismember(ID, excldIDs) == 0
+                WMHextraction_kNNdiscovery_Step2 (k, ...
+                                                  ID, ...
+                                                  CNSP_path, ...
+                                                  studyFolder, ...
+                                                  classifier, ...
+                                                  dartelTemplate, ...
+                                                  ageRange, ...
+                                                  probThr, ...
+                                                  trainingFeatures1, ...
+                                                  trainingFeatures2 ...
+                                                  );
+            end
+        catch ME
+
+            WMHextraction_dealWithProcErr (ME, fullfile(studyFolder,'subjects'), ID, mfilename('fullpath'));
+
         end
     end
 
@@ -222,18 +248,25 @@ function WMHextraction_woQC_cmd (studyFolder, ...
 %     system (cmd_kNN_step3_1);
 
     parfor i = 1:Nsubj
-        T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
-        ID = T1imgNames{1};   % first section is ID
+        try
+            T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
+            ID = T1imgNames{1};   % first section is ID
 
-        if ismember(ID, excldIDs) == 0
-            cmd_kNN_step3_2 = [CNSP_path '/WMH_extraction/WMHextraction/WMHextraction_kNNdiscovery_Step3.sh ' ...
-                                                                                                ID ' ' ...
-                                                                                                studyFolder '/subjects ' ...
-                                                                                                CNSP_path '/WMH_extraction ' ...
-                                                                                                PVWMH_magnitude ' ' ...
-                                                                                                probThr_str ...
-                                                                                                ];
-            system (cmd_kNN_step3_2);
+            if ismember(ID, excldIDs) == 0
+                cmd_kNN_step3_2 = [CNSP_path '/WMH_extraction/WMHextraction/WMHextraction_kNNdiscovery_Step3.sh ' ...
+                                                                                                    ID ' ' ...
+                                                                                                    studyFolder '/subjects ' ...
+                                                                                                    CNSP_path '/WMH_extraction ' ...
+                                                                                                    PVWMH_magnitude ' ' ...
+                                                                                                    probThr_str ...
+                                                                                                    ];
+                system (cmd_kNN_step3_2);
+            end
+
+        catch ME
+
+            WMHextraction_dealWithProcErr (ME, fullfile(studyFolder,'subjects'), ID, mfilename('fullpath'));
+
         end
     end
 
@@ -257,12 +290,18 @@ function WMHextraction_woQC_cmd (studyFolder, ...
     system ([CNSP_path '/WMH_extraction/WMHextraction/WMHspreadsheetTitle.sh ' studyFolder '/subjects']);
 
     for i = 1:Nsubj
-        T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
-        ID = T1imgNames{1};   % first section is ID
+        try
+            T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
+            ID = T1imgNames{1};   % first section is ID
 
-        if ismember(ID, excldIDs) == 0
-            cmd_merge_WMHresults_4 = [CNSP_path '/WMH_extraction/WMHextraction/WMHextraction_kNNdiscovery_Step4.sh ' ID ' ' studyFolder '/subjects'];
-            system (cmd_merge_WMHresults_4);
+            if ismember(ID, excldIDs) == 0
+                cmd_merge_WMHresults_4 = [CNSP_path '/WMH_extraction/WMHextraction/WMHextraction_kNNdiscovery_Step4.sh ' ID ' ' studyFolder '/subjects'];
+                system (cmd_merge_WMHresults_4);
+            end
+        catch ME
+
+            WMHextraction_dealWithProcErr (ME, fullfile(studyFolder,'subjects'), ID, mfilename('fullpath'));
+
         end
     end                                
 
@@ -295,16 +334,22 @@ function WMHextraction_woQC_cmd (studyFolder, ...
 
 
     parfor i = 1:Nsubj
-        T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
-        ID = T1imgNames{1};   % first section is ID
-        
-        if ismember(ID, excldIDs) == 0
-            switch dartelTemplate
-            case 'existing template'
-                WMHresultsBack2NativeSpace (studyFolder, ID, spm12path);
-            case 'creating template'
-                WMHresultsBack2NativeSpace (studyFolder, ID, spm12path, '', 'creating template');
+        try
+            T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
+            ID = T1imgNames{1};   % first section is ID
+            
+            if ismember(ID, excldIDs) == 0
+                switch dartelTemplate
+                case 'existing template'
+                    WMHresultsBack2NativeSpace (studyFolder, ID, spm12path);
+                case 'creating template'
+                    WMHresultsBack2NativeSpace (studyFolder, ID, spm12path, '', 'creating template');
+                end
             end
+        catch ME
+
+            WMHextraction_dealWithProcErr (ME, fullfile(studyFolder,'subjects'), ID, mfilename('fullpath'));
+
         end
     end
 

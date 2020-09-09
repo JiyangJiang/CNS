@@ -93,11 +93,17 @@ function WMHextraction_wQC_cmd_1 (studyFolder, spm12path, outputFormat)
     % folder, using ID as folder name. Copy corresponding T1 and FLAIR to the
     % orig folder of each subject
     parfor i = 1:Nsubj
-        T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
-        ID = T1imgNames{1};   % first section is ID
-        mkdir (strcat(studyFolder,'/subjects/',ID,'/mri'),'orig');  % create orig folder under each subject folder
-        copyfile (strcat (studyFolder,'/originalImg/T1/', T1folder(i).name), strcat(studyFolder,'/subjects/',ID,'/mri/orig/'));        % copy T1 to each subject folder
-        copyfile (strcat (studyFolder,'/originalImg/FLAIR/', FLAIRfolder(i).name), strcat(studyFolder,'/subjects/',ID,'/mri/orig/'));  % copy FLAIR to each subject folder
+        try
+            T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
+            ID = T1imgNames{1};   % first section is ID
+            mkdir (strcat(studyFolder,'/subjects/',ID,'/mri'),'orig');  % create orig folder under each subject folder
+            copyfile (strcat (studyFolder,'/originalImg/T1/', T1folder(i).name), strcat(studyFolder,'/subjects/',ID,'/mri/orig/'));        % copy T1 to each subject folder
+            copyfile (strcat (studyFolder,'/originalImg/FLAIR/', FLAIRfolder(i).name), strcat(studyFolder,'/subjects/',ID,'/mri/orig/'));  % copy FLAIR to each subject folder
+        catch ME
+
+            WMHextraction_dealWithProcErr (ME, fullfile(studyFolder,'subjects'), ID, mfilename('fullpath'));
+
+        end
     end
     
     
