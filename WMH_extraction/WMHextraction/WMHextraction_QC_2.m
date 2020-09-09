@@ -8,6 +8,10 @@ function WMHextraction_QC_2 (studyFolder, coregExcldList, outputFormat, varargin
 
     coregExcldIDs = strsplit (coregExcldList, ' ');
 
+    % those failed previous processing step/s
+    failureIDcellArr = WMHextraction_readFailureList (fullfile(studyFolder,'subjects'));
+    coregExcldIDs = [coregExcldIDs;failureIDcellArr];
+
 %     cmd_1 = ['chmod +x ' pipelineFolder '/generateQCimgs_2.sh'];
 %     system (cmd_1);
 % 

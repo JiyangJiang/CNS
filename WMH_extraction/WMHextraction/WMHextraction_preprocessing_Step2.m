@@ -16,6 +16,10 @@ function WMHextraction_preprocessing_Step2 (studyFolder, spm12path, coregExcldLi
     
     coregExcldIDs = strsplit (coregExcldList, ' ');
 
+    % those failed previous processing step/s
+    failureIDcellArr = WMHextraction_readFailureList (fullfile(studyFolder,'subjects'));
+    coregExcldIDs = [coregExcldIDs;failureIDcellArr];
+
     cmd_createCoregFailureFolder = ['if [ ! -d ' studyFolder '/subjects/coregQCfailure ]; then mkdir ' studyFolder '/subjects/coregQCfailure; fi'];
     
 

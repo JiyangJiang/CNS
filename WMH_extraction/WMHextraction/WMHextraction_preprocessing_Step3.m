@@ -45,6 +45,10 @@ function existingTemplateDARTELrun (studyFolder, CNSP_path, coregExcldList, segE
 
     excldList = [coregExcldList ' ' segExcldList];
     excldIDs = strsplit (excldList, ' ');
+
+    % those failed previous processing step/s
+    failureIDcellArr = WMHextraction_readFailureList (fullfile(studyFolder,'subjects'));
+    excldIDs = [excldIDs;failureIDcellArr];
     
     segExcldIDs = strsplit (segExcldList, ' ');
 
