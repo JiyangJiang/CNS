@@ -25,6 +25,7 @@ function WMHextraction_woQC_cmd (studyFolder, ...
     % add path
     WMHextractionPath = fileparts(fileparts(fileparts(which([mfilename '.m']))));
     CNSP_path = fileparts (WMHextractionPath);
+    system (['chmod +x $(find ' CNSP_path ' -name *.sh)']);
     addpath (spm12path, genpath(WMHextractionPath), [CNSP_path '/Scripts'], [CNSP_path '/downloaded_scipts/NIfTI_tools']);
     
     fprintf ('\n');

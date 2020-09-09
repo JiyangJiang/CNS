@@ -46,6 +46,7 @@ function WMHextraction_wQC_cmd_1 (studyFolder, spm12path, outputFormat)
     CNSP_path = fileparts(fileparts(fileparts(fileparts(which([mfilename '.m'])))));
     addpath ([CNSP_path '/Scripts']);
     addpath ([CNSP_path '/WMH_extraction/WMHextraction']);
+    system (['chmod +x $(find ' CNSP_path ' -name *.sh)']);
     
     %%%%%%%%%%%%%%%%%%%%%%%%
     %% Organising folders %%

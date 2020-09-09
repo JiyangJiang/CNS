@@ -64,6 +64,7 @@ clc;
 fprintf ('\n---=== Welcome to CNS packages ! ===---\n');
 fprintf ('\nCNS: Setting paths ...\n');
 addpath(genpath(fileparts(which([mfilename '.m'])))); % addpath with subfolders
+system (['chmod +x $(find ' fileparts(which([mfilename '.m'])) ' -name *.sh)']); % give permission to *.sh
 setappdata(0,'CNSP_path',fileparts(which([mfilename '.m'])));
 setappdata (0, 'old_LD_LIBRARY_PATH', CNSP_resetLib); % reset LD_LIBRARY_PATH
 fprintf ('CNS: Done.\n');
