@@ -24,50 +24,60 @@ function WMHextraction_preprocessing_Step4 (studyFolder, dartelTemplate, coregEx
 
     parfor i = 1:Nsubj
 
-        T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
-        T1imgFileNames = strsplit (T1folder(i).name, '.');
-        ID = T1imgNames{1};   % first section is ID
-        T1imgFileName = T1imgFileNames{1};
 
-        if ismember(ID, excldIDs) == 0
+        try
 
-            matlabbatch = [];   % preallocate to enable parfor
-            spm_jobman('initcfg');
+            T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
+            T1imgFileNames = strsplit (T1folder(i).name, '.');
+            ID = T1imgNames{1};   % first section is ID
+            T1imgFileName = T1imgFileNames{1};
 
-            switch dartelTemplate
-                case 'existing template'
-                    flowMap = strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing/u_rc1', T1folder(i).name);
+            if ismember(ID, excldIDs) == 0
+
+                matlabbatch = [];   % preallocate to enable parfor
+                spm_jobman('initcfg');
+
+                switch dartelTemplate
+                    case 'existing template'
+                        flowMap = strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing/u_rc1', T1folder(i).name);
+                    
+                    case 'creating template'
+                        flowMap = [studyFolder '/subjects/' ID '/mri/preprocessing/u_rc1' T1imgFileName '_Template.nii'];
+
+                end
+    %             
                 
-                case 'creating template'
-                    flowMap = [studyFolder '/subjects/' ID '/mri/preprocessing/u_rc1' T1imgFileName '_Template.nii'];
+                
+
+                origT1 = strcat (studyFolder, '/subjects/', ID, '/mri/orig/', T1folder(i).name);
+                rFLAIR = strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing/r', FLAIRfolder(i).name);
+                cGM = strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing/c1', T1folder(i).name);
+                cWM = strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing/c2', T1folder(i).name);
+                cCSF = strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing/c3', T1folder(i).name);
+
+
+                matlabbatch{1}.spm.tools.dartel.crt_warped.flowfields = {flowMap};
+                matlabbatch{1}.spm.tools.dartel.crt_warped.images = {
+                                                                     {origT1}
+                                                                     {rFLAIR}
+                                                                     {cGM}
+                                                                     {cWM}
+                                                                     {cCSF}
+                                                                     }';
+                matlabbatch{1}.spm.tools.dartel.crt_warped.jactransf = 0;
+                matlabbatch{1}.spm.tools.dartel.crt_warped.K = 6;
+                matlabbatch{1}.spm.tools.dartel.crt_warped.interp = 1;
+
+                output = spm_jobman ('run',matlabbatch);
 
             end
-%             
-            
-            
 
-            origT1 = strcat (studyFolder, '/subjects/', ID, '/mri/orig/', T1folder(i).name);
-            rFLAIR = strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing/r', FLAIRfolder(i).name);
-            cGM = strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing/c1', T1folder(i).name);
-            cWM = strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing/c2', T1folder(i).name);
-            cCSF = strcat (studyFolder, '/subjects/', ID, '/mri/preprocessing/c3', T1folder(i).name);
+        catch ME
 
-
-            matlabbatch{1}.spm.tools.dartel.crt_warped.flowfields = {flowMap};
-            matlabbatch{1}.spm.tools.dartel.crt_warped.images = {
-                                                                 {origT1}
-                                                                 {rFLAIR}
-                                                                 {cGM}
-                                                                 {cWM}
-                                                                 {cCSF}
-                                                                 }';
-            matlabbatch{1}.spm.tools.dartel.crt_warped.jactransf = 0;
-            matlabbatch{1}.spm.tools.dartel.crt_warped.K = 6;
-            matlabbatch{1}.spm.tools.dartel.crt_warped.interp = 1;
-
-            output = spm_jobman ('run',matlabbatch);
-
+            WMHextraction_dealWithProcErr (ME, fullfile(studyFolder,'subjects'), ID, mfilename('fullpath'));
+    
         end
+
     end
     
 

@@ -40,21 +40,27 @@ rFLAIR = cell (Nsubj, 1);
 
 for i = 1:Nsubj
 
-    T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
-    if nargin == 2
-        ID = T1imgNames{1};
-    elseif (nargin == 3) && (strcmp (varargin{1}, 'long'))
-        subjID = T1imgNames{1};
-        tpID = T1imgNames{2};
-        ID = [subjID '_' tpID];
-    end
-    
-    T1{i,1} = [studyFolder '/originalImg/T1/' T1folder(i).name];
-    rFLAIR{i,1} = [studyFolder '/subjects/' ID '/mri/preprocessing/r' FLAIRfolder(i).name];
+    try
+
+        T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
+        if nargin == 2
+            ID = T1imgNames{1};
+        elseif (nargin == 3) && (strcmp (varargin{1}, 'long'))
+            subjID = T1imgNames{1};
+            tpID = T1imgNames{2};
+            ID = [subjID '_' tpID];
+        end
+        
+        T1{i,1} = [studyFolder '/originalImg/T1/' T1folder(i).name];
+        rFLAIR{i,1} = [studyFolder '/subjects/' ID '/mri/preprocessing/r' FLAIRfolder(i).name];
 
 %     cmd = [pipelineFolder '/generateQCimgs_1.sh ' ID ' ' studyFolder '/subjects ' T1folder(i).name];
 %     system (cmd);
-   
+    catch ME
+
+            WMHextraction_dealWithProcErr (ME, fullfile(studyFolder,'subjects'), ID, mfilename('fullpath'));
+    
+    end
 end
 
     % slice and display
