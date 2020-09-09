@@ -11,8 +11,8 @@ function WMHextraction_QC_3 (studyFolder, coregExcldList, segExcldList, outputFo
 
     % those failed previous processing step/s
     failureIDcellArr = WMHextraction_readFailureList (fullfile(studyFolder,'subjects'));
-    excldIDs = [excldIDs;failureIDcellArr];
-    
+    excldIDs = [excldIDs failureIDcellArr];
+
     T1folder = dir (strcat (studyFolder,'/originalImg/T1/*.nii'));
     FLAIRfolder = dir (strcat (studyFolder,'/originalImg/FLAIR/*.nii'));
     [Nsubj,~] = size (T1folder);

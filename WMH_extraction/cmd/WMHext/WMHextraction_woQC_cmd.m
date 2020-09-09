@@ -151,6 +151,10 @@ function WMHextraction_woQC_cmd (studyFolder, ...
     
 %     cmd_skullStriping_FAST_1 = ['chmod +x ' CNSP_path '/WMH_extraction/WMHextraction_SkullStriping_and_FAST.sh'];
 %     system (cmd_skullStriping_FAST_1);
+
+    % those failed previous processing step/s
+    failureIDcellArr = WMHextraction_readFailureList (fullfile(studyFolder,'subjects'));
+    excldIDs = [excldIDs failureIDcellArr];
     
     parfor i = 1:Nsubj
 
@@ -186,6 +190,9 @@ function WMHextraction_woQC_cmd (studyFolder, ...
 %     cmd_kNN_step1_1 = ['chmod +x ' CNSP_path '/WMH_extraction/WMHextraction_kNNdiscovery_Step1.sh'];
 %     system (cmd_kNN_step1_1);
 
+    % those failed previous processing step/s
+    failureIDcellArr = WMHextraction_readFailureList (fullfile(studyFolder,'subjects'));
+    excldIDs = [excldIDs failureIDcellArr];
 
     parfor i = 1:Nsubj
         try
@@ -213,6 +220,10 @@ function WMHextraction_woQC_cmd (studyFolder, ...
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % kNN WMH discovery Step 2: kNN calculation %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    % those failed previous processing step/s
+    failureIDcellArr = WMHextraction_readFailureList (fullfile(studyFolder,'subjects'));
+    excldIDs = [excldIDs failureIDcellArr];
      
     parfor i = 1:Nsubj
         try
@@ -244,6 +255,10 @@ function WMHextraction_woQC_cmd (studyFolder, ...
     % kNN WMH discovery Step 3: Postprocessing and cleanup %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     probThr_str = num2str (probThr, '%1.2f');
+
+    % those failed previous processing step/s
+    failureIDcellArr = WMHextraction_readFailureList (fullfile(studyFolder,'subjects'));
+    excldIDs = [excldIDs failureIDcellArr];
     
 %     cmd_kNN_step3_1 = ['chmod +x ' CNSP_path '/WMH_extraction/WMHextraction_kNNdiscovery_Step3.sh'];
 %     system (cmd_kNN_step3_1);
@@ -287,6 +302,10 @@ function WMHextraction_woQC_cmd (studyFolder, ...
 
 %     cmd_merge_WMHresults_3 = ['chmod +x ' CNSP_path '/WMH_extraction/WMHextraction_kNNdiscovery_Step4.sh'];
 %     system (cmd_merge_WMHresults_3);
+
+    % those failed previous processing step/s
+    failureIDcellArr = WMHextraction_readFailureList (fullfile(studyFolder,'subjects'));
+    excldIDs = [excldIDs failureIDcellArr];
 
     system ([CNSP_path '/WMH_extraction/WMHextraction/WMHspreadsheetTitle.sh ' studyFolder '/subjects']);
 
@@ -333,6 +352,9 @@ function WMHextraction_woQC_cmd (studyFolder, ...
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     fprintf ('3.6 Bringing DARTEL space WMH mask to native space ...\n');
 
+    % those failed previous processing step/s
+    failureIDcellArr = WMHextraction_readFailureList (fullfile(studyFolder,'subjects'));
+    excldIDs = [excldIDs failureIDcellArr];
 
     parfor i = 1:Nsubj
         try

@@ -2760,7 +2760,7 @@ function WMHextraction_main_inGUI_Stage3 (studyFolder, ...
 
     % those failed previous processing step/s
     failureIDcellArr = WMHextraction_readFailureList (fullfile(studyFolder,'subjects'));
-    excldIDs = [excldIDs;failureIDcellArr];
+    excldIDs = [excldIDs failureIDcellArr];
     
     T1folder = dir (strcat (studyFolder,'/originalImg/T1/*.nii'));
     FLAIRfolder = dir (strcat (studyFolder,'/originalImg/FLAIR/*.nii'));
@@ -3136,7 +3136,7 @@ function WMHextraction_main_noQCstops (studyFolder, ...
 
     % those failed previous processing step/s
     failureIDcellArr = WMHextraction_readFailureList (fullfile(studyFolder,'subjects'));
-    excldIDs = [excldIDs;failureIDcellArr];
+    excldIDs = [excldIDs failureIDcellArr];
  
     %%%%%%%%%%%%%%%%%%%%%%%%
     %% Organising folders %%
