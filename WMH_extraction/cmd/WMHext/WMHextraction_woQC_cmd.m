@@ -383,6 +383,10 @@ function WMHextraction_woQC_cmd (studyFolder, ...
     indFLAIR_cellArr = cell (Nsubj, 1);
     indWMH_FLAIRspace_cellArr = cell (Nsubj, 1);
 
+    % those failed previous processing step/s
+    failureIDcellArr = WMHextraction_readFailureList (fullfile(studyFolder,'subjects'));
+    excldIDs = [excldIDs failureIDcellArr];
+
     for i = 1:Nsubj
         T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
         ID = T1imgNames{1};   % first section is ID
