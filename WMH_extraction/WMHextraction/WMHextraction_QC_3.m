@@ -19,20 +19,28 @@ function WMHextraction_QC_3 (studyFolder, coregExcldList, segExcldList, outputFo
     
     for i = 1:Nsubj
 
-        T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
+        try
 
-        if nargin == 4
-            ID = T1imgNames{1};
-        elseif (nargin == 5) && (strcmp (varargin{1}, 'long')) % longitudinal run
-            subjID = T1imgNames{1};
-            tpID =  T1imgNames{2};
-            ID = [subjID '_' tpID];
-        end
+            T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
 
-        if ismember(ID, excldIDs) == 0
-            k = k + 1;
-            wrFLAIR{k,1} = [studyFolder '/subjects/' ID '/mri/preprocessing/wr' FLAIRfolder(i).name];
-            WMH{k,1} = [studyFolder '/subjects/' ID '/mri/extractedWMH/' ID '_WMH.nii.gz'];
+            if nargin == 4
+                ID = T1imgNames{1};
+            elseif (nargin == 5) && (strcmp (varargin{1}, 'long')) % longitudinal run
+                subjID = T1imgNames{1};
+                tpID =  T1imgNames{2};
+                ID = [subjID '_' tpID];
+            end
+
+            if ismember(ID, excldIDs) == 0
+                k = k + 1;
+                wrFLAIR{k,1} = [studyFolder '/subjects/' ID '/mri/preprocessing/wr' FLAIRfolder(i).name];
+                WMH{k,1} = [studyFolder '/subjects/' ID '/mri/extractedWMH/' ID '_WMH.nii.gz'];
+            end
+
+        catch ME
+
+            WMHextraction_dealWithProcErr (ME, fullfile(studyFolder,'subjects'), ID, mfilename('fullpath'));
+    
         end
     end
 

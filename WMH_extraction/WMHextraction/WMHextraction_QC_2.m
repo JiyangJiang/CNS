@@ -37,24 +37,32 @@ function WMHextraction_QC_2 (studyFolder, coregExcldList, outputFormat, varargin
 
     for i = 1:Nsubj
 
-        T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
-        if nargin == 3
-            ID = T1imgNames{1};
-        elseif (nargin == 4) && (strcmp (varargin{1}, 'long'))
-            subjID = T1imgNames{1};
-            tpID = T1imgNames{2};
-            ID = [subjID '_' tpID];
-        end
-            
+        try
 
-        if ismember(ID, coregExcldIDs) == 0
-            k = k + 1;
-            T1{k,1} = [studyFolder '/originalImg/T1/' T1folder(i).name];
-            Seg{k,1} = [studyFolder '/subjects/' ID '/mri/preprocessing/c1' T1folder(i).name];
-            Seg{k,2} = [studyFolder '/subjects/' ID '/mri/preprocessing/c2' T1folder(i).name];
-            Seg{k,3} = [studyFolder '/subjects/' ID '/mri/preprocessing/c3' T1folder(i).name];
-%             cmd = [pipelineFolder '/generateQCimgs_2.sh ' ID ' ' studyFolder '/subjects'];
-%             system (cmd);
+            T1imgNames = strsplit (T1folder(i).name, '_');   % split T1 image name, delimiter is underscore
+            if nargin == 3
+                ID = T1imgNames{1};
+            elseif (nargin == 4) && (strcmp (varargin{1}, 'long'))
+                subjID = T1imgNames{1};
+                tpID = T1imgNames{2};
+                ID = [subjID '_' tpID];
+            end
+                
+
+            if ismember(ID, coregExcldIDs) == 0
+                k = k + 1;
+                T1{k,1} = [studyFolder '/originalImg/T1/' T1folder(i).name];
+                Seg{k,1} = [studyFolder '/subjects/' ID '/mri/preprocessing/c1' T1folder(i).name];
+                Seg{k,2} = [studyFolder '/subjects/' ID '/mri/preprocessing/c2' T1folder(i).name];
+                Seg{k,3} = [studyFolder '/subjects/' ID '/mri/preprocessing/c3' T1folder(i).name];
+    %             cmd = [pipelineFolder '/generateQCimgs_2.sh ' ID ' ' studyFolder '/subjects'];
+    %             system (cmd);
+            end
+
+        catch ME
+
+            WMHextraction_dealWithProcErr (ME, fullfile(studyFolder,'subjects'), ID, mfilename('fullpath'));
+    
         end
     end
 

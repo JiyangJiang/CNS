@@ -22,13 +22,20 @@ function WMHextraction_preprocessing_Step3 (studyFolder, ...
 
     spm('defaults', 'fmri');
     
-    switch dartelTemplate
-        case 'existing template'
-            existingTemplateDARTELrun (studyFolder, CNSP_path, coregExcldList, segExcldList, ageRange)
-            
-        case 'creating template'
-            creatingTemplateDARTELrun (studyFolder, coregExcldList, segExcldList);
+    try
+        switch dartelTemplate
+            case 'existing template'
+                existingTemplateDARTELrun (studyFolder, CNSP_path, coregExcldList, segExcldList, ageRange)
+                
+            case 'creating template'
+                creatingTemplateDARTELrun (studyFolder, coregExcldList, segExcldList);
 
+        end
+
+    catch ME
+
+        WMHextraction_dealWithProcErr (ME, fullfile(studyFolder,'subjects'), ID, mfilename('fullpath'));
+    
     end
     
     

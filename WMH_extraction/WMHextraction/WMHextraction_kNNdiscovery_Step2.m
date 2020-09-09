@@ -83,38 +83,7 @@ if exist (decision4training, 'file') == 2
         seg012_combined4D_score = seg012_combined4D;
         
         clear seg012_combined4D;
-        
-%         seg012_combined4D_label_refined = seg012_combined4D; % duplicate for assigning different values
-%         seg012_combined4D_score_refined = seg012_combined4D;
-        
-        
-        %% label map (i.e. prob thr = 0.5)
-%         fprintf (['Generating WMH label map (i.e. probability threshold = 0.5) for ' ID ' ...\n']);       
-%         label_cell {1} = label (1:seg0_max);
-%         label_cell {2} = label ((seg0_max+1):(seg0_max+seg1_max));
-%         label_cell {3} = label ((seg0_max+seg1_max+1):(seg0_max+seg1_max+seg2_max));
-%         
-%         %--- WM prob map
-%         %         WMprobMap_struct = load_nii ([CNSP_path '/Templates/DARTEL_GM_WM_CSF_prob_maps/65to75/DARTEL_WM_prob_map.nii.gz']);
-%         %         WMprobMap = cast (WMprobMap_struct.img,'double');
-%         for a = 1:3
-%             for b = 1:seg012_max(1,a)
-%                 [x,y,z] = ind2sub(size(seg012_combined4D_label(:,:,:,a)),find(seg012_combined4D_label(:,:,:,a) == b)); % find index in 3D array
-%                 [x_Nrow,x_Ncol] = size(x);
-%    
-%                 for c = 1: x_Nrow
-%                     if strcmp(label_cell{a}{b}, 'Yes')
-%                        seg012_combined4D_label(x(c),y(c),z(c),a) = 1;
-%                     else
-%                        seg012_combined4D_label(x(c),y(c),z(c),a) = 0;
-%                     end
-%                 end
-%             end
-%         end
-%         
-%         seg012_label_img = seg012_combined4D_label(:,:,:,1) + seg012_combined4D_label(:,:,:,2) + seg012_combined4D_label(:,:,:,3);
-%         save_nii(make_nii (seg012_label_img), [studyFolder '/subjects/' ID '/mri/extractedWMH/' ID '_WMH_LablMap.nii']);
-                        
+                       
                         
         %% probability map
         fprintf (['UBO Detector: generating WMH score map (i.e. WMH probability map) for ' ID ' ...\n']);
@@ -151,57 +120,8 @@ if exist (decision4training, 'file') == 2
         save_nii (make_nii (thresholded_probMap), [studyFolder '/subjects/' ID '/mri/extractedWMH/' ID '_WMH_Prob' probThr_parts{1} '_' probThr_parts{2} '.nii']);
         
 
-        %% number of focal incidences count
-        % fprintf ('Counting number of incidences ...');
 
-        % WMHclusters = bwconncomp(thresholded_probMap, 6);
-        % whlBrn_NoI = WMHclusters.NumObjects; % whole brain number of incidences
-
-        % load lobar map
-
-        clear thresholded_probMap;
-
-        %% Refinement with specified ProbThr
-%         fprintf (['Generating WMH map with specified probability threshold and refinement applied for ' ID ' ...\n']);
-%         if (nargin == 10) || ((nargin == 11) && strcmp(varargin{1}, 'noGenF'))
-%             [secondKNNlabel,secondKNNscore] = WMHextraction_postprocessing_refinement (studyFolder,ID,label,feature4training,decision4training, k, trainingFeatures2);
-%         elseif nargin > 11 && strcmp(varargin{1}, 'noGenF')
-%             [secondKNNlabel,secondKNNscore] = WMHextraction_postprocessing_refinement (studyFolder,ID,label,feature4training,decision4training, k, trainingFeatures2, varargin{2:end});  % same setting as the first kNN
-%         elseif nargin > 10 && ~strcmp(varargin{1}, 'noGenF')
-%             [secondKNNlabel,secondKNNscore] = WMHextraction_postprocessing_refinement (studyFolder,ID,label,feature4training,decision4training, k, trainingFeatures2, varargin{:});
-%         end
-%             
-%         label_cell_refined {1} = secondKNNlabel (1:seg0_max);
-%         label_cell_refined {2} = secondKNNlabel ((seg0_max+1):(seg0_max+seg1_max));
-%         label_cell_refined {3} = secondKNNlabel ((seg0_max+seg1_max+1):(seg0_max+seg1_max+seg2_max));
-%         for k = 1:3
-%             for t = 1:seg012_max(1,k)
-%                 [h, l, s] = ind2sub(size(seg012_combined4D_label_refined(:,:,:,k)),find(seg012_combined4D_label_refined(:,:,:,k) == t)); % find index in 3D array
-%                 [h_Nrow,~] = size(h);
-%    
-%                 for u = 1: h_Nrow        
-%                     % ------ refined image ------
-%                     if strcmp(label_cell_refined{k}{t},'Yes')
-%                         seg012_combined4D_label_refined(h(u),l(u),s(u),k) = 1;                   
-%                     else
-%                         seg012_combined4D_label_refined(h(u),l(u),s(u),k) = 0;
-%                     end                    
-%                 end
-%             end
-%         end
-%                         
-%         seg012_label_img_refined = seg012_combined4D_label_refined(:,:,:,1) + seg012_combined4D_label_refined(:,:,:,2) + seg012_combined4D_label_refined(:,:,:,3);
-% %         size (seg012_label_img_refined)
-% %         max(nonzeros(seg012_label_img_refined))
-% %         size (thresholded_probMap)
-% %         size (label)
-% %         size (secondKNNlabel)
-%         % seg012_label_img_refined = seg012_label_img_refined .* thresholded_probMap;
-% %         save_nii(make_nii (seg012_label_img_refined),...
-% %                             [studyFolder '/subjects/' ID '/mri/extractedWMH/' ID '_WMH_Prob' probThr_parts{1} '_' probThr_parts{2} '_refined.nii']); 
-%         save_nii(make_nii (seg012_label_img_refined),...
-%                             [studyFolder '/subjects/' ID '/mri/extractedWMH/' ID '_WMH_refinementKNN.nii']); 
-        
+        clear thresholded_probMap;          
         
         
     else
