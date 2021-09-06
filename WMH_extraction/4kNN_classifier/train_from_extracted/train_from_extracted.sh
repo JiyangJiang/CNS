@@ -2,11 +2,11 @@
 
 # This is the main command to perform 'train from extracted (TFE)'
 
-# subjDIR=$1
-# id=$2
+subjDIR=$1
+id=$2
 
-subjDIR='/data4/jiyang/temp2'
-id='1239362'
+# subjDIR='/data4/jiyang/temp2'
+# id='1239362'
 
 TFEdir=dirname $(which $0)
 export PATH=$TFEdir:$PATH
