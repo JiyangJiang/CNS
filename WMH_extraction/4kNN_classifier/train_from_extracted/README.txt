@@ -17,7 +17,7 @@ AIM
 METHODS
 -------
 
-+ (SHELL) call train_from_extracted.sh </path/to/subjects> <ID>
++ (SHELL) call train_from_extracted.sh </path/to/subjects> <ID> </path/to/train_from_extracted>
 		  This will run the following 3 commands:
 		  
 	+ (SHELL) generate_ascii.sh </path/to/subjects> <ID>
@@ -34,5 +34,6 @@ METHODS
 
 		- combine lookup table, decision, and feature into a single csv file.
 
-+ Visualise WMH mask superimposing onto FLAIR, with seg0-2 index maps, and 
++ Visualise WMH mask (ID/mri/extracted/ID_WMH.nii.gz) superimposing onto FLAIR (ID/mri/orig/ID_FLAIR.nii or
+  ID/kNN_intermediateOutput/wrFLAIR), with seg0-2 index maps (ID/mri/extractedWMH/temp/ID_seg?.nii.gz), and 
   correct the csv file.
