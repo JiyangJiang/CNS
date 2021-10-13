@@ -6,10 +6,10 @@
 
 % ID is unique, and is the first part of filename (delimited by _)
 
-function DOEE_main (raw_data_folder, spm12path)
+% function DOEE_main (raw_data_folder, spm12path)
 
-% raw_data_folder = '/data_pri/jiyang/wmhProject/manualTracing4paper/Rebecca_review/Similarity/calculate_doee_Wack2012';
-% spm12path = '/usr/share/spm12';
+raw_data_folder = '/home/jiyang/Work/MW1_for_manLab';
+spm12path = '/home/jiyang/Software/spm12';
 
 addpath (fileparts (mfilename ('fullpath')));
 
@@ -19,7 +19,7 @@ rater1_filename_struct = dir ([raw_data_folder '/rater1/*.nii.gz']);
 rater2_filename_struct = dir ([raw_data_folder '/rater2/*.nii.gz']);
 [N_rater1_imgs, ~] = size (rater1_filename_struct);
 
-parfor i = 1:N_rater1_imgs
+for i = 1:N_rater1_imgs
 	rater1_filename = rater1_filename_struct(i).name;
 	rater2_filename	= rater2_filename_struct(i).name;
 
@@ -44,3 +44,7 @@ parfor i = 1:N_rater1_imgs
 	DOEE_singlerun (rater1_result, rater2_result, outputDIR, spm12path)
 
 end
+
+% extract group-level results in shell
+
+% while read i;do id=$(grep ID $i/summary_output.txt | awk -F ' = ' '{print $2}');der=$(grep DER $i/summary_output.txt | awk -F ' = ' '{print $2}');oer=$(grep OER $i/summary_output.txt | awk -F ' = ' '{print $2}');echo "$id,$der,$oer";done < manLab.list > performance_metrics2.csv
