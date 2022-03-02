@@ -92,14 +92,14 @@ done
 # echo "ID,wholeBrainWMHvol_mm3,PVWMHvol_mm3,DWMHvol_mm3,Lfrontal_WMHvol_mm3,Rfrontal_WMHvol_mm3,Ltemporal_WMHvol_mm3,Rtemporal_WMHvol_mm3,Lparietal_WMHvol_mm3,Rparietal_WMHvol_mm3,Loccipital_WMHvol_mm3,Roccipital_WMHvol_mm3,Lcerebellum_WMHvol_mm3,Rcerebellum_WMHvol_mm3,Brainstem_WMHvol_mm3" \
 # > ${studyFolder}/subjects/WMH_spreadsheet.txt
 
-$(dirname $(dirname $(realpath $0)))/WMHextraction/WMHspreadsheetTitle.sh ${studyFolder}/subjects
+$(dirname $(dirname $(dirname $(realpath $0))))/WMHextraction/WMHspreadsheetTitle.sh ${studyFolder}/subjects
 
 for T1_path in `ls ${studyFolder}/originalImg/T1/*.nii`
 do
 	T1_filename=`basename ${T1_path} .nii`
 	ID=`echo ${T1_filename} | awk -F'_' '{print $1}'`
 
-	$(dirname $(dirname $(realpath $0)))/WMHextraction/WMHextraction_kNNdiscovery_Step4.sh ${ID} ${studyFolder}/subjects
+	$(dirname $(dirname $(dirname $(realpath $0))))/WMHextraction/WMHextraction_kNNdiscovery_Step4.sh ${ID} ${studyFolder}/subjects
 done
 
 rm -fr ${studyFolder}/manual_editing
