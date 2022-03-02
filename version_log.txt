@@ -1,4 +1,4 @@
-CURR_VER=2.0.2
+CURR_VER=2.0.3
 
 
 RELEASE NOTES
@@ -67,6 +67,8 @@ ver. 2.0.2 			15/08/2018	threshold with mean+1.1SD 0.8 WM mask to cope with subc
 					10/02/2020	fix nan issue in cohort prob maps when using 'creating template' 
 								(WMHextraction_preprocessing_Step4.m)
 
+
+ver. 2.0.3			03/03/2022	fix bug - WMHext_manEdt_upld.sh
 
 
 
