@@ -81,7 +81,7 @@ else
 											c.NumWorkers=${Nworkers};\
 											parpool(c,c.NumWorkers);\
 											WMHextraction_woQC_cmd('${studyFolder}',\
-																	'/usr/share/spm12',\
+																	'/software/spm12',\
 																	'existing template',\
 																	5,\
 																	'12',\
